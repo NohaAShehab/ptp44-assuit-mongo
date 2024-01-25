@@ -79,7 +79,72 @@ student {_id, name, subject: [{_id, name}, {_id, name}]}
 
 //// save student grade in each subject 
 /// name ---> 90% will not be changed 
-student {_id, name, "subject": [{_id, name, std_score}, {_id, name}, {}]}
+// student {_id, name, "subject": [{_id, name, std_score}, {_id, name}, {}]}
+
+
+/// get students and the subject he/she study 
+
+db.students.find({"subjects": {$exists:true}}, {"subjects":1})
+
+
+//print student with subject names
+// get subjects 
+
+let allsubjects = db.subjects.find({}, {name:1}).toArray()
+
+print(allsubjects)
+
+//  get the students with their subjects 
+
+db.students.find({
+    "subjects":{"$exists":true},
+    "subjects": {"$type": "array"}
+    } ,
+ {}).forEach((document)=> {
+     
+//      print(document.subjects)
+     // print student name and subject names
+     
+     subjects_ = ""
+     for (i of document.subjects) {
+//          print(i)
+         subname = allsubjects.find((element)=>element._id==i)
+//       ` print(subname.name)
+         subjects_ +=subname.name +" " 
+         }
+//      
+//     print(subjects_)
+         
+         print(`${document.firstName} studies ${subjects_}`)
+         
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
